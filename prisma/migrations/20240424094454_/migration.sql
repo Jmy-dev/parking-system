@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "isAdmin" BOOLEAN NOT NULL DEFAULT false;
+
+-- CreateTable
+CREATE TABLE "OTP" (
+    "id" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "content" INTEGER NOT NULL,
+    "belongsToId" TEXT NOT NULL,
+
+    CONSTRAINT "OTP_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "OTP" ADD CONSTRAINT "OTP_belongsToId_fkey" FOREIGN KEY ("belongsToId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

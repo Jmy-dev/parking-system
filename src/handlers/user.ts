@@ -31,8 +31,7 @@ export const createNewUser = async (req , res ) => {
         const token = await newtoken(user)
         const data = {
             token: token,
-            username:user.username ,
-            email:user.email ,
+            id:user.id,
            isAdmin: user.isAdmin ,
             isVerified:user.isVerified
         }
@@ -65,8 +64,7 @@ export const signin = async (req , res)  => {
         const token = await newtoken(user)
         const data = {
             token: token,
-            username:user.username ,
-            email:user.email ,
+            id:user.id,
            isAdmin: user.isAdmin ,
             isVerified:user.isVerified
         }

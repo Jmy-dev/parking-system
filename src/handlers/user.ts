@@ -26,11 +26,17 @@ export const createNewUser = async (req , res ) => {
                 email: req.body.email ,
                 carType: req.body.carType ,
                 mobileNumber: req.body.mobileNumber
-
             }
         })
         const token = await newtoken(user)
-        res.status(201).json({token})
+        const data = {
+            token: token,
+            username:user.username ,
+            email:user.email ,
+           isAdmin: user.isAdmin ,
+            isVerified:user.isVerified
+        }
+        res.status(201).json(data)
         
     } catch (e) {
         console.error(e);
@@ -57,8 +63,15 @@ export const signin = async (req , res)  => {
             return res.status(400).json({message: "Incorrect Password"})
         }
         const token = await newtoken(user)
+        const data = {
+            token: token,
+            username:user.username ,
+            email:user.email ,
+           isAdmin: user.isAdmin ,
+            isVerified:user.isVerified
+        }
     
-        res.status(200).json(token)
+        res.status(200).json(data)
         
     } catch (e) {
         console.error(e)

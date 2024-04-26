@@ -12,7 +12,8 @@ export const newtoken = async(user) => {
     const token =  await jwt.sign({
         id:user.id ,
         username: user.username ,
-        isAdmin: user.isAdmin
+        isAdmin: user.isAdmin ,
+        isVerified: user.isVerified
     } , process.env.JWT_SECRET
 )
     return token
@@ -36,3 +37,11 @@ export const protect = (req ,res , next) =>{
     
     next()
 } 
+
+export const checkForEmailVerification = (req , res , next) => {
+    if(req.user.isVerified === false) {
+        return res.status(401).json({message:"You need to be verified in order to use the apis!!"})
+    }
+    next()
+
+}

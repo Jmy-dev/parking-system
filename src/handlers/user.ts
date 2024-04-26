@@ -69,7 +69,22 @@ export const signin = async (req , res)  => {
 
 export const getAllusers = async (req , res ) => {
     try {
-        const users = await prisma.user.findMany({});
+        if(!req.user.isAdmin) {
+            return res.status(400).json({message:"You are not authorized to perform such an action!!"})
+
+        }
+        const users = await prisma.user.findMany({
+            select:{
+                id: true,
+                isAdmin:true,
+                username: true ,
+                points: true ,
+                email: true ,
+                mobileNumber: true,
+                carType:true ,
+                isVerified:true
+             }
+        });
 
         res.status(200).json({data:users})
 
@@ -87,11 +102,14 @@ export const getCurrentUser = async (req , res) =>{
                 id:req.user.id
             } ,
             select:{
+               id: true,
+               isAdmin:true,
                username: true ,
                points: true ,
                email: true ,
                mobileNumber: true,
-               carType:true 
+               carType:true ,
+               isVerified:true
             }
             
 
@@ -109,7 +127,9 @@ export const getCurrentUser = async (req , res) =>{
 export const updateUser = async (req , res) => {
     try {
         if(req.user.isAdmin || (req.params.id === req.user.id)) {
-            if(req.user.isAdmin === "false" && req.body.points) {
+            console.log( req.user.isAdmin)
+            if((req.user.isAdmin === false) && req.body.points) {
+                console.log("works!!")
                 return res.status(401).json({message:"You are not authorized to perform such an action!!"})
             }
             
@@ -129,7 +149,7 @@ export const updateUser = async (req , res) => {
                 } ,
                 data:{
                     carType: req.body.carType ,
-                    points:  (user.points + req.body.points) ,
+                    points:   req.body.points ,
                     slot:req.body.slot
     
                 }

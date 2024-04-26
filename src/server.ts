@@ -2,7 +2,7 @@ import express from 'express'
 import router from './router'
 import morgan from 'morgan'
 import cors from 'cors'
-import { protect } from './modules/auth'
+import { checkForEmailVerification, protect } from './modules/auth'
 import { createNewUser, signin } from './handlers/user'
 import { checkForAdmin, checkForEmptyAndString, handleInputErrors} from './modules/middlewares'
 import { requestOTP, verifyOTP } from './modules/verify'
@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended: true}))
 app.get('/' , (req, res) => {
   res.status(200).json({message: "Welcome to the Parking System"})
 })
-app.use('/api' , protect , router)
+app.use('/api' , protect, checkForEmailVerification , router)
 app.post('/signin' ,
 checkForEmptyAndString('email') ,
 checkForEmptyAndString('password'),

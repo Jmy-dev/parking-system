@@ -2,7 +2,7 @@ import prisma from './db'
 import {Router} from  'express'
 
 import {body , validationResult} from 'express-validator'
-import { deleteUser, getAllusers, updateUser } from './handlers/user'
+import { deleteUser, getAllusers, getCurrentUser, updateUser } from './handlers/user'
 import { createSlot, deleteSlot, getAllAvailableSlots, getAllSlots, getOneSlot, updateSlot } from './handlers/slots'
 import { checkForEmptyAndString, handleInputErrors } from './modules/middlewares'
 
@@ -16,7 +16,7 @@ const router = Router()
 router.get('/user', getAllusers)
 
 router.put('/user/:id',updateUser)
-
+router.get('/user/me' , getCurrentUser)
 router.delete ('/user/:id' , deleteUser)
 
 

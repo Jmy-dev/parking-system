@@ -139,7 +139,7 @@ export const updateUser = async (req , res) => {
     try {
         if(req.user.isAdmin || (req.params.id === req.user.id)) {
             console.log( req.user.isAdmin)
-            if((req.user.isAdmin === false) &&( req.body.points && (req.body.payment === true))) {
+            if((req.user.isAdmin === false) &&( (req.body.points) && (!req.body.payment))) {
                 console.log("works!!")
                 return res.status(401).json({message:"You are not authorized to perform such an action!!"})
             }

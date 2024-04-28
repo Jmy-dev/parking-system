@@ -202,3 +202,22 @@ export const deleteUser = async (req , res) =>{
         res.status(400).end()
     }
 }
+
+export const getSpecificUser = async (req , res) =>{
+    try {
+        const user = await prisma.user.findUnique({
+            where:{
+                id: req.params.id
+            }
+        })
+        if(!user) {
+            return res.status(400).json({message:"User is not found!"})
+        }
+        res.status(200).json({data:user})
+        
+    } catch (e) {
+        console.error(e);
+        res.status(400).end()
+    }
+
+}

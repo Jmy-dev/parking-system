@@ -61,6 +61,16 @@ export const createSlot = async (req , res) => {
         if(!req.user.isAdmin) {
             return res.status(401).json({message:"You are not authorized to perform such an action "})
         }
+        const found = await prisma.slot.findUnique({
+            where:{
+                code:req.body.code
+            }
+        })
+
+        if(found) {
+            return res.status(400).json({message: "Code must be unique!!"})
+        }
+        
         const createdSlot = await prisma.slot.create({
             data:{
                 code:req.body.code

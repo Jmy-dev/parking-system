@@ -2,7 +2,7 @@ import prisma from './db'
 import {Router} from  'express'
 
 import {body , validationResult} from 'express-validator'
-import { deleteUser, getAllusers, getCurrentUser, updateUser } from './handlers/user'
+import { deleteUser, getAllusers, getCurrentUser, getSpecificUser, updateUser } from './handlers/user'
 import { createSlot, deleteSlot, getAllAvailableSlots, getAllSlots, getOneSlot, updateSlot } from './handlers/slots'
 import { checkForEmptyAndString, handleInputErrors } from './modules/middlewares'
 
@@ -14,7 +14,7 @@ const router = Router()
  */
 
 router.get('/user', getAllusers)
-
+router.get('/user/:id',getSpecificUser)
 router.put('/user/:id',updateUser)
 router.get('/user/me' , getCurrentUser)
 router.delete ('/user/:id' , deleteUser)
@@ -31,7 +31,6 @@ router.get('/slot/available' , getAllAvailableSlots)
 router.get('/slot/:id' , getOneSlot)
 
 router.put('/slot/:id' , 
-   checkForEmptyAndString('userId') ,
    body('isFree' ,'You need to update the isFree Status').exists(),
    handleInputErrors,
    updateSlot)

@@ -82,9 +82,7 @@ export const createSlot = async (req , res) => {
 
 export const updateSlot = async (req , res) => {
     try {
-        if(!req.user.isAdmin) {
-            return res.status(401).json({message:"You are not authorized to perform such an action "})
-        }
+        
 
         const updatedSlot = await prisma.slot.update({
             where:{

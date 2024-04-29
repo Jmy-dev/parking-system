@@ -14,9 +14,9 @@ const router = Router()
  */
 
 router.get('/user', getAllusers)
+router.get('/user/me' , getCurrentUser)
 router.get('/user/:id',getSpecificUser)
 router.put('/user/:id',updateUser)
-router.get('/user/me' , getCurrentUser)
 router.delete ('/user/:id' , deleteUser)
 
 

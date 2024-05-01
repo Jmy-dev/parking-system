@@ -7,6 +7,7 @@ import { createNewUser, signin } from './handlers/user'
 import { checkForAdmin, checkForEmptyAndString, handleInputErrors} from './modules/middlewares'
 import { requestOTP, verifyOTP } from './modules/verify'
 import { body } from 'express-validator'
+import { getSensorData } from './modules/sensors'
 
 
 
@@ -49,5 +50,7 @@ app.post('/register',
   handleInputErrors ,
   verifyOTP
   )
+
+  app.post('/sensordata' , getSensorData)
 
 export default app;

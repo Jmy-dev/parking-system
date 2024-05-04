@@ -62,7 +62,6 @@ app.post('/register',
   app.post('/resetpassword',
    checkForEmptyAndString('email') ,
    checkForEmptyAndString('newPassword') ,
-   body('otp',"the otp can't be empty").notEmpty(),
    handleInputErrors,
    resetpassword
   )

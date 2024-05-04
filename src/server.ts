@@ -3,7 +3,7 @@ import router from './router'
 import morgan from 'morgan'
 import cors from 'cors'
 import { checkForEmailVerification, protect } from './modules/auth'
-import { createNewUser, signin } from './handlers/user'
+import { createNewUser, forgetPassword, resetpassword, signin } from './handlers/user'
 import { checkForAdmin, checkForEmptyAndString, handleInputErrors} from './modules/middlewares'
 import { requestOTP, verifyOTP } from './modules/verify'
 import { body } from 'express-validator'
@@ -52,5 +52,19 @@ app.post('/register',
   )
 
   app.post('/sensordata' , getSensorData)
+
+  app.post('/forgetpassword',
+  checkForEmptyAndString('email'),
+  handleInputErrors,
+  forgetPassword
+)
+
+  app.post('/resetpassword',
+   checkForEmptyAndString('email') ,
+   checkForEmptyAndString('newPassword') ,
+   body('otp',"the otp can't be empty").notEmpty(),
+   handleInputErrors,
+   resetpassword
+  )
 
 export default app;

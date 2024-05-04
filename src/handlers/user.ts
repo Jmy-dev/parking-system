@@ -1,5 +1,6 @@
 import prisma from '../db'
 import { comparePassword, hashPassword, newtoken } from '../modules/auth'
+import {createOTP , sendOTP} from '../modules/verify'
 
 export const createNewUser = async (req , res ) => {
     try {
@@ -218,6 +219,82 @@ export const getSpecificUser = async (req , res) =>{
     } catch (e) {
         console.error(e);
         res.status(400).end()
+    }
+
+}
+
+export const forgetPassword = async (req , res) => {
+    try {
+        
+        //check if email already exists in database 
+        const exists = await prisma.user.findUnique({
+            where:{
+                email:req.body.email
+            }
+        })
+        if(!exists) {
+            return res.status(400).json({message: "This email doesn't exist!"})
+        }
+        //create and send an otp to the email 
+        const otp = createOTP()
+        await sendOTP(req.body.email , otp);
+        //update user's otp
+        const updatedOTP = await prisma.oTP.update({
+            where:{
+                userId:exists.id
+            } ,
+            data:{
+                content:Number(otp)
+            }
+        })
+        if(!updatedOTP) {
+            return res.status(400).json({message:"Couldn't update the otp for the user"})
+        }
+        res.status(200).json({message: 'OTP sent'})
+    } catch (e) {
+        console.error(e)
+        res.status(400).json({message:"Something went wrong in the forget password process!"})
+    }
+
+    //w8 for the user to send back the otp 
+    //if the otp is correct just let him change the password 
+    //if not just return 400
+}
+export const resetpassword = async (req , res) => {
+    try {
+        const { email, newPassword, otp } = req.body;
+    
+        const user = await prisma.user.findUnique({
+            where:{
+                email
+            } , 
+            include:{
+                otp: true
+            }
+        })
+        if(!user ) {
+            res.status(400).json({message:"this email doesn't exist!"})
+        }
+        if(user.otp.content === otp) {
+            const updatedUser = await prisma.user.update({
+                where:{
+                    email
+                } ,
+                data:{
+                    password: await hashPassword(newPassword)
+                }
+            })
+    
+            return res.status(201).json({message: "Password changed successfully!"})
+    
+        } else {
+            return res.status(400).json({message:"OTP check failed!"})
+        }
+        
+    } catch (e) {
+        console.error(e)
+        res.status(400).json({message: "Something went wrong while reseting the password!"})
+        
     }
 
 }

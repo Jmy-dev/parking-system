@@ -5,13 +5,13 @@ import prisma from '../db'
 
 
 
-function createOTP() {
+export function createOTP() {
 
     return randomString.generate({length:5 , charset:'numeric'})
   }
   
 
-async function sendOTP (email , otp) {
+export async function sendOTP (email , otp) {
     const mailOptions = {
         from: 'ahmedleagelol@gmail.com' ,
         to: email ,
@@ -87,7 +87,8 @@ export const verifyOTP = async (req , res) => {
                     email
                 } ,
                 data: {
-                    isVerified: true
+                    isVerified: true ,
+                    otp:null
                 }
             })
             if(!updatedUser) {

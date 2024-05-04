@@ -11,7 +11,8 @@ import { createServer } from 'node:http';
 
 const server = createServer(app)
 
-const io = new Server(server ,{transports: ['websocket']})
+const io = new Server(server ,{})
+app.set('socketio',io);
 
 io.on('connection' , (socket) => {
     console.log(`user is connected on :${socket.id} `)
@@ -23,6 +24,6 @@ io.on('connection' , (socket) => {
 
 
 
-app.listen(config.port , () => {
+server.listen(config.port , () => {
     console.log(` Hello on http://localhost:${config.port}`)
 })

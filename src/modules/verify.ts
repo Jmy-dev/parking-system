@@ -77,11 +77,18 @@ export const verifyOTP = async (req , res) => {
             }
             
         }) 
+
         if(!user) {
             return res.status(400).json({message:"This email doesn't exist"})
+        } 
+        if(!user.otp){
+            return res.status(400).json({message:"This email has no OTP!"})
         }
 
-        if(otp === user.otp.content) {
+        if(otp === (user.otp.content)) {
+            if(req.body.resetPassword){
+                return res.status(201).json({message:"OTP is Verified!"})
+            }
             const updatedUser = await prisma.user.update({
                 where:{
                     email
@@ -95,6 +102,8 @@ export const verifyOTP = async (req , res) => {
                 return res.status(400).json({message:"couldn't update the user!!"})
             }
             res.status(200).json({message: "email is verified!!"})
+        } else {
+            return res.status(400).json({message: "Wrong OTP!!"})
         }
 
         

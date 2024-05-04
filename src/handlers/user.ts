@@ -262,20 +262,17 @@ export const forgetPassword = async (req , res) => {
 }
 export const resetpassword = async (req , res) => {
     try {
-        const { email, newPassword, otp } = req.body;
+        const { email, newPassword} = req.body;
     
         const user = await prisma.user.findUnique({
             where:{
                 email
-            } , 
-            include:{
-                otp: true
-            }
+            } 
         })
         if(!user ) {
             res.status(400).json({message:"this email doesn't exist!"})
         }
-        if(user.otp.content === otp) {
+        
             const updatedUser = await prisma.user.update({
                 where:{
                     email
@@ -287,9 +284,7 @@ export const resetpassword = async (req , res) => {
     
             return res.status(201).json({message: "Password changed successfully!"})
     
-        } else {
-            return res.status(400).json({message:"OTP check failed!"})
-        }
+         
         
     } catch (e) {
         console.error(e)

@@ -7,7 +7,7 @@ import { createNewUser, forgetPassword, resetpassword, signin } from './handlers
 import { checkForAdmin, checkForEmptyAndString, handleInputErrors} from './modules/middlewares'
 import { requestOTP, verifyOTP } from './modules/verify'
 import { body } from 'express-validator'
-import { getSensorData } from './modules/sensors'
+import { alretSecurity, getSensorData } from './modules/sensors'
 
 
 
@@ -64,6 +64,10 @@ app.post('/register',
    checkForEmptyAndString('newPassword') ,
    handleInputErrors,
    resetpassword
+  )
+  app.post('/alertsecurity',
+  checkForEmptyAndString('slotNumber'),
+   alretSecurity
   )
 
 export default app;

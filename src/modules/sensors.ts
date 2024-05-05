@@ -68,9 +68,6 @@ export const getSensorData = async (req , res) => {
         }
 
         
-
-
-        
         
     } catch (e) {
         console.error(e)
@@ -82,9 +79,43 @@ export const getSensorData = async (req , res) => {
 /*
 export const getSensorData =  (req, res) => {
     console.log("Sensor data :" , req.body)
-    const io = req.app.get('socketio')
+    
     io.emit('sensorData' , req.body);
     console.log("works!")
     return res.status(200).json({data: req.body})
 }
 */
+
+
+export const alretSecurity = async (req , res) => {
+    try {
+        const {slotNumber} = req.body;
+
+        const security = await prisma.user.findFirst({
+            where:{
+                isAdmin: true
+            }
+        })
+
+        
+
+        const message = {
+            notification: {
+                title: "Alert!!",
+                body: `There is a problem with the slot:${slotNumber} please head towards it!`
+            } ,
+            token: security.FCMtoken
+        }
+
+        const response = await getMessaging().send(message)
+        console.log("successfully sent message:" , response )
+        res.status(200).json({message:"Security Informed!!"})
+        
+    } catch (e) {
+        console.error(e)
+        res.status(400).json({message :"Something went wrong"})
+    }
+
+
+    
+}

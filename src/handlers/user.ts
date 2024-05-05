@@ -162,7 +162,8 @@ export const updateUser = async (req , res) => {
                 data:{
                     carType: req.body.carType ,
                     points:   req.body.points ,
-                    slot:req.body.slot
+                    slot:req.body.slot ,
+                    FCMtoken:req.body.FCMtoken
     
                 }
             })

@@ -31,6 +31,9 @@ export const getSensorData = async (req , res) => {
                 user: true
             }
         })
+        if(!slot) {
+            return res.status(400).json({message: "There is no slot!"})
+        }
 
         const fcm = slot.user.FCMtoken;
         if(!fcm) {

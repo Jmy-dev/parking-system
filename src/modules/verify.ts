@@ -43,6 +43,17 @@ export const requestOTP = async (req , res) => {
     try {
         const {email , userId} = req.body;
         const otp = createOTP();
+
+        const user = await prisma.user.findFirst({
+            where: {
+                id:userId ,
+                email
+            }
+        })
+
+        if(!user) {
+            return res.status(400).json({message: "User doesn't exist!!"})
+        }
         const createdOTP = await prisma.oTP.create({
             data:{
                 content: Number(otp) ,
@@ -84,6 +95,7 @@ export const verifyOTP = async (req , res) => {
         if(!user.otp){
             return res.status(400).json({message:"This email has no OTP!"})
         }
+        console.log(user.otp.content)
 
         if(otp === (user.otp.content)) {
             if(req.body.resetPassword){
@@ -94,8 +106,7 @@ export const verifyOTP = async (req , res) => {
                     email
                 } ,
                 data: {
-                    isVerified: true ,
-                    otp:null
+                    isVerified: true
                 }
             })
             if(!updatedUser) {

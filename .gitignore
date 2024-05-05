@@ -2,3 +2,4 @@ node_modules
 # Keep environment variables out of version control
 .env
 dist
+parking-app-5a96e-firebase-adminsdk-4syka-6b0fb0be12.json

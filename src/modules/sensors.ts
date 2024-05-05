@@ -1,15 +1,13 @@
 import { initializeApp , applicationDefault } from "firebase-admin/app";
 import {getMessaging}  from 'firebase-admin/messaging'
 import prisma from "../db";
-import { token } from "morgan";
-import { title } from "process";
-import { body } from "express-validator";
+
 
 process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 initializeApp({
     credential: applicationDefault() ,
-    projectId: 'parking-system-ba4c0'
+    projectId: 'parking-app-5a96e'
 })
 
 
@@ -86,3 +84,4 @@ export const getSensorData =  (req, res) => {
     console.log("works!")
     return res.status(200).json({data: req.body})
 }
+*/

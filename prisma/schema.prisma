@@ -24,6 +24,7 @@ model User {
   points    Int      @default(0)
   isAdmin   Boolean  @default(false)
   isVerified Boolean @default(false)
+  FCMtoken   String?
   otp       OTP?
   slot      Slot?     
 

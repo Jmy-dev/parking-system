@@ -14,7 +14,9 @@ export const newtoken = async(user) => {
         username: user.username ,
         isAdmin: user.isAdmin ,
         isVerified: user.isVerified
-    } , process.env.JWT_SECRET
+    } , process.env.JWT_SECRET , {
+        expiresIn: '365d'
+    }
 )
     return token
 }

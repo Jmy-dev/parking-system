@@ -10,6 +10,33 @@ initializeApp({
     projectId: 'parking-app-5a96e'
 })
 
+async function alerttSecurity (slot) {
+    try {
+        const security = await prisma.user.findFirst({
+            where:{
+                isAdmin: true
+            }
+        })
+    
+        
+    
+        const message = {
+            notification: {
+                title: "Alert!!",
+                body: `There is a problem with the slot : A 0${slot} please head towards it!`
+            } ,
+            token: security.FCMtoken
+        }
+    
+        const response = await getMessaging().send(message)
+        console.log("message sent  successfully to security :" , response )
+        return
+        
+    } catch (e) {
+        throw new Error(e)
+    }
+    
+}
 
 /**
  * get the changed slot and wheter its full or empty
@@ -33,6 +60,10 @@ export const getSensorData = async (req , res) => {
         })
         if(!slot) {
             return res.status(400).json({message: "There is no slot!"})
+        }
+        if((!slot.userId) && (req.body.status === true)) {
+             alerttSecurity(slotNumber)
+            return res.status(200).json({message:"Security is Informed!!"})
         }
 
         const fcm = slot.user.FCMtoken;
@@ -90,25 +121,10 @@ export const getSensorData =  (req, res) => {
 export const alretSecurity = async (req , res) => {
     try {
         const {slotNumber} = req.body;
+        alerttSecurity(slotNumber)
 
-        const security = await prisma.user.findFirst({
-            where:{
-                isAdmin: true
-            }
-        })
-
+       
         
-
-        const message = {
-            notification: {
-                title: "Alert!!",
-                body: `There is a problem with the slot:${slotNumber} please head towards it!`
-            } ,
-            token: security.FCMtoken
-        }
-
-        const response = await getMessaging().send(message)
-        console.log("successfully sent message:" , response )
         res.status(200).json({message:"Security Informed!!"})
         
     } catch (e) {

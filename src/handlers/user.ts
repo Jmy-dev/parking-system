@@ -121,8 +121,9 @@ export const getCurrentUser = async (req , res) =>{
                email: true ,
                mobileNumber: true,
                carType:true ,
-               isVerified:true
-            }
+               isVerified:true ,
+               slot:true
+            } 
             
 
         })
